@@ -16,6 +16,7 @@ from .errors import (
 )
 from .models.ability_score import AbilityScore
 from .models.action import (
+    Action,
     ActionStep,
     ActionStepAttack,
     ActionStepDamage,
@@ -42,6 +43,7 @@ from .services.character_service import CharacterService
 
 __all__ = [
     "AbilityScore",
+    "Action",
     "AlchemyHTTPClient",
     "AlchemyPyError",
     "Alignment",

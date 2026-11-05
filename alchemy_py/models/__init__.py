@@ -2,6 +2,7 @@
 
 from .ability_score import AbilityScore
 from .action import (
+    Action,
     ActionStep,
     ActionStepAttack,
     ActionStepDamage,
@@ -19,6 +20,7 @@ from .saving_throw import SavingThrow
 
 __all__ = [
     "AbilityScore",
+    "Action",
     "Alignment",
     "ActionStep",
     "ActionStepAttack",

@@ -78,6 +78,17 @@ class ActionStepAttack:
         resolved_rolls_attack = rollsAttack if rollsAttack else rolls_attack
         resolved_saving_throw = savingThrow if savingThrow is not None else saving_throw
 
+        if resolved_damage_rolls is not None:
+            normalized_damage_rolls = []
+            for item in resolved_damage_rolls:
+                if isinstance(item, ActionStepDamage):
+                    normalized_damage_rolls.append(item)
+                elif isinstance(item, dict):
+                    normalized_damage_rolls.append(ActionStepDamage(**item))
+                else:
+                    raise TypeError(f"damageRolls[{item}] is not type {ActionStepDamage} or dict")
+            resolved_damage_rolls = normalized_damage_rolls
+
         self.ability = ability
         self.actionType = ActionType(resolved_action_type) if isinstance(resolved_action_type, str) else (resolved_action_type or ActionType.Action)
         self.bonus = bonus
@@ -143,9 +154,19 @@ class ActionStepJournalCommand:
     command: Command | None = None
     args: str = ""
 
-    def __init__(self, command: Command | None = None, args: str = "", command_name: Command | None = None):
+    def __init__(self, command: Command | str | None = None, args: str = "", command_name: Command | str | None = None):
         if command is None:
             command = command_name
+        if isinstance(command, str):
+            normalized = command.strip()
+            if normalized.lower() in {"/me", "me"}:
+                command = Command.Me
+            elif normalized.lower() in {"/roll", "roll"}:
+                command = Command.Roll
+            elif normalized.lower() in {"/whisper", "whisper"}:
+                command = Command.Whisper
+            else:
+                command = Command(normalized)
         self.command = command
         self.args = args
 
@@ -157,15 +178,17 @@ class ActionStepSkillCheck:
 
     def __init__(
         self,
-        rollModifier: RollModifier | None = None,
+        rollModifier: RollModifier | str | None = None,
         skillName: str = "",
-        roll_modifier: RollModifier | None = None,
+        roll_modifier: RollModifier | str | None = None,
         skill_name: str = "",
     ):
         if rollModifier is None:
             rollModifier = roll_modifier
         if skillName == "":
             skillName = skill_name
+        if isinstance(rollModifier, str):
+            rollModifier = RollModifier(rollModifier.lower())
         self.rollModifier = rollModifier
         self.skillName = skillName
 
@@ -180,20 +203,30 @@ class ActionStep:
 
     def __init__(
         self,
-        type: ActionStepType | None = None,
-        journalCommand: ActionStepJournalCommand | None = None,
-        journal_command: ActionStepJournalCommand | None = None,
+        type: ActionStepType | str | None = None,
+        journalCommand: ActionStepJournalCommand | dict | None = None,
+        journal_command: ActionStepJournalCommand | dict | None = None,
         diceRoll: list[ActionStepDamage] | None = None,
         dice_roll: list[ActionStepDamage] | None = None,
-        attack: ActionStepAttack | None = None,
-        skillCheck: ActionStepSkillCheck | None = None,
-        skill_check: ActionStepSkillCheck | None = None,
+        attack: ActionStepAttack | dict | None = None,
+        skillCheck: ActionStepSkillCheck | dict | None = None,
+        skill_check: ActionStepSkillCheck | dict | None = None,
     ):
         resolved_journal_command = journalCommand if journalCommand is not None else journal_command
         resolved_dice_roll = diceRoll if diceRoll is not None else dice_roll
         resolved_skill_check = skillCheck if skillCheck is not None else skill_check
 
-        self.type = type
+        if isinstance(type, str):
+            self.type = ActionStepType(type)
+        else:
+            self.type = type
+
+        if isinstance(resolved_journal_command, dict):
+            resolved_journal_command = ActionStepJournalCommand(**resolved_journal_command)
+        if isinstance(resolved_skill_check, dict):
+            resolved_skill_check = ActionStepSkillCheck(**resolved_skill_check)
+        if isinstance(attack, dict):
+            attack = ActionStepAttack(**attack)
 
         if resolved_journal_command is None and resolved_dice_roll is None and attack is None and resolved_skill_check is None:
             raise ValueError("one of journalCommand, diceRoll, attack, or skillCheck must not be None")
@@ -218,3 +251,136 @@ class ActionStep:
         self.diceRoll = resolved_dice_roll
         self.attack = attack
         self.skillCheck = resolved_skill_check
+
+    @classmethod
+    def from_api(cls, data: dict):
+        if not isinstance(data, dict):
+            raise TypeError("action step payload must be a dict")
+
+        payload = dict(data)
+        step_type = payload.get("type")
+        kwargs: dict = {"type": step_type}
+
+        if payload.get("attack") not in (None, {}):
+            kwargs["attack"] = payload["attack"]
+        if payload.get("journalCommand") not in (None, {}):
+            kwargs["journalCommand"] = payload["journalCommand"]
+        if payload.get("skillCheck") not in (None, {}):
+            kwargs["skillCheck"] = payload["skillCheck"]
+
+        return cls(**kwargs)
+
+
+# LLM-Generated: Completed the Action model and API normalization helpers.
+
+def _serialize_attack(attack: ActionStepAttack | None) -> dict:
+    if attack is None:
+        return {}
+
+    payload = {
+        "ability": attack.ability,
+        "actionType": attack.actionType.value if hasattr(attack.actionType, "value") else str(attack.actionType),
+        "bonus": attack.bonus,
+        "crit": attack.crit,
+        "damageRolls": [
+            {
+                "abilityName": damage.abilityName,
+                "bonus": damage.bonus,
+                "dice": str(damage.dice),
+                "type": damage.type,
+            }
+            for damage in attack.damageRolls
+        ],
+        "isProficient": attack.isProficient,
+        "isRanged": attack.isRanged,
+        "name": attack.name,
+        "rollsAttack": attack.rollsAttack,
+        "savingThrow": attack.savingThrow,
+    }
+    if attack.range is not None:
+        payload["range"] = attack.range
+    if attack.longRange is not None:
+        payload["longRange"] = attack.longRange
+    return payload
+
+
+def _serialize_step(step: ActionStep) -> dict:
+    payload = {
+        "type": step.type.value if hasattr(step.type, "value") else str(step.type),
+    }
+    if step.attack is not None:
+        payload["attack"] = _serialize_attack(step.attack)
+    if step.journalCommand is not None:
+        payload["journalCommand"] = {
+            "command": step.journalCommand.command.value if hasattr(step.journalCommand.command, "value") else str(step.journalCommand.command),
+            "args": step.journalCommand.args,
+        }
+    if step.skillCheck is not None:
+        payload["skillCheck"] = {
+            "rollModifier": step.skillCheck.rollModifier.value if hasattr(step.skillCheck.rollModifier, "value") else str(step.skillCheck.rollModifier),
+            "skillName": step.skillCheck.skillName,
+        }
+    return payload
+
+
+@dataclass(init=False)
+class Action:
+    description: str = ""
+    name: str = ""
+    sortOrder: int = 0
+    steps: list[ActionStep] = field(default_factory=list)
+
+    def __init__(
+        self,
+        description: str = "",
+        name: str = "",
+        sortOrder: int = 0,
+        steps: list[ActionStep | dict] | None = None,
+        sort_order: int | None = None,
+    ):
+        if sort_order is not None:
+            sortOrder = sort_order
+
+        if not isinstance(description, str):
+            raise TypeError("description must be a string")
+        if not isinstance(name, str):
+            raise TypeError("name must be a string")
+        if not isinstance(sortOrder, int):
+            raise TypeError("sortOrder must be an integer")
+
+        normalized_steps: list[ActionStep] = []
+        if steps is not None:
+            if not isinstance(steps, list):
+                raise TypeError("steps must be a list or None")
+            for item in steps:
+                if isinstance(item, ActionStep):
+                    normalized_steps.append(item)
+                elif isinstance(item, dict):
+                    normalized_steps.append(ActionStep.from_api(item))
+                else:
+                    raise TypeError(f"steps[{item}] must be an ActionStep or dict")
+
+        self.description = description
+        self.name = name
+        self.sortOrder = sortOrder
+        self.steps = normalized_steps
+
+    @classmethod
+    def from_api(cls, payload: dict):
+        if not isinstance(payload, dict):
+            raise TypeError("action payload must be a dict")
+        return cls(
+            description=str(payload.get("description", "")),
+            name=str(payload.get("name", "")),
+            sortOrder=int(payload.get("sortOrder", 0)),
+            steps=payload.get("steps", []),
+        )
+
+    def to_api(self) -> dict:
+        return {
+            "description": self.description,
+            "name": self.name,
+            "sortOrder": self.sortOrder,
+            "steps": [_serialize_step(step) for step in self.steps],
+        }
+

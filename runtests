@@ -1,4 +1,4 @@
 #!/bin/bash
 
 clear
-python -m pytest -v --ignore=pytilities
+python -m pytest -v --ignore=pytilites --cov 

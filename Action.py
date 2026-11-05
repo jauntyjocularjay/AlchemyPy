@@ -1,4 +1,5 @@
 from alchemy_py.models.action import (
+    Action,
     ActionStep,
     ActionStepAttack,
     ActionStepDamage,
@@ -11,6 +12,7 @@ from alchemy_py.models.action import (
 )
 
 __all__ = [
+    "Action",
     "ActionStep",
     "ActionStepAttack",
     "ActionStepDamage",

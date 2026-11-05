@@ -1,50 +1,27 @@
-from enum import Enum
+from enum import StrEnum
 import AbilityScore
 import SavingThrow
-import random
 
-class Command(Enum):
+class Command(StrEnum):
     Me = '/me'
     Roll = '/roll'
     Whisper = '/whisper'
 
-class ActionType(Enum):
+class ActionType(StrEnum):
     Action = 'Action'
     BonusAction = 'Bonus Action'
     Reaction = 'Reaction'
 
-class RollModifier(Enum):
+class RollModifier(StrEnum):
     Advantage = 'advantage'
     Disadvantage = 'disadvantage'
 
-class ActionStepType(Enum):
+class ActionStepType(StrEnum):
     Message = 'message',
     JournalCommand = 'journal-command',
     CustomDiceRoll = 'custom-dice-roll',
     CustomAttack = 'custom-attack',
     SkillCheck = 'skill-check'
-
-class Dice:
-    count: int
-    sides: int
-    result: list[int] = [] # Stores the last result of the roll of Dice
-
-    def __init__(self, count: int, sides: int):
-        self.count = count
-        self.sides = sides
-
-    def __init__(self, string: str):
-        d_index = string.index('d')
-        self.count = int(string[:d_index])
-        self.sides = int(string[d_index+1:])
-
-    def __str__(self):
-        return f'{self.count}d{self.sides}'
-
-    def roll(self):
-        self.result = [random.randint(1, self.sides) for i in range(self.count)]
-        return self.result
-
 
 class ActionStepAttack:
     ability: AbilityScore
@@ -127,11 +104,11 @@ class ActionStep:
         self.skillCheck = skillCheck if skillCheck is not None else None
 
 
-class Action:
-    description: str
-    name: str
-    sortOrder: int
-    steps: list[ActionStep] = []
+# class Action:
+#     description: str
+#     name: str
+#     sortOrder: int
+#     steps: list[ActionStep] = []
 
 
 

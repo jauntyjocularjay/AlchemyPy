@@ -1,11 +1,11 @@
-from enum import Enum
+from enum import StrEnum
 
-class Morality(Enum):
+class Morality(StrEnum):
     Good = "Good",
     Neutral = "Neutral",
     Evil = "Evil"
 
-class Order(Enum):
+class Order(StrEnum):
     Lawful = "Lawful",
     Neutral = "Neutral",
     Chaotic = "Chaotic"

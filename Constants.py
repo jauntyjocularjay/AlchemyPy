@@ -1,4 +1,4 @@
+from alchemy_py.types.constants import CURRENT, MAX
 
-CURRENT = "current"
-MAX = "max"
+__all__ = ["CURRENT", "MAX"]
 

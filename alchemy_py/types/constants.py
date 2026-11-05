@@ -1,0 +1,2 @@
+CURRENT = "current"
+MAX = "max"

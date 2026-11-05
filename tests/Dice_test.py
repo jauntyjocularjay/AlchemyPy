@@ -48,3 +48,5 @@ def test_dice_roll_keeps_results_within_die_bounds(monkeypatch):
 
     assert result == [10, 10]
     assert all(1 <= value <= 10 for value in result)
+
+

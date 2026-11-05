@@ -1,24 +1,5 @@
-from enum import StrEnum
+from alchemy_py.models.alignment import Alignment, Morality, Order
 
-class Morality(StrEnum):
-    Good = "Good",
-    Neutral = "Neutral",
-    Evil = "Evil"
-
-class Order(StrEnum):
-    Lawful = "Lawful",
-    Neutral = "Neutral",
-    Chaotic = "Chaotic"
-
-class Alignment():
-    morality: Morality
-    order: Order
-
-    def __init__(self, morality: Morality, order: Order):
-        self.morality = morality
-        self.order = order
-
-    def __str__(self):
-        return f'{self.order} {self.morality}'
+__all__ = ["Alignment", "Morality", "Order"]
 
 

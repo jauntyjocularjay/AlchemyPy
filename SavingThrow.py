@@ -1,8 +1,4 @@
+from alchemy_py.models.saving_throw import SavingThrow
 
-class SavingThrow:
-    abilityName: str
-    difficultyClass: int
+__all__ = ["SavingThrow"]
 
-    def __init__(self, abilityName: str, difficultyClass: int):
-        self.abilityName = abilityName
-        self.difficultyClass = difficultyClass

@@ -1,0 +1,29 @@
+{
+  "description": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) piercing damage.",
+  "name": "Longsword",
+  "sortOrder": 0,
+  "steps": [
+    {
+      "attack": {
+        "ability": "str",
+        "actionType": "Action",
+        "crit": 20,
+        "damageRolls": [
+          {
+            "abilityName": "str",
+            "dice": "1d8",
+            "type": "Piercing"
+          }
+        ],
+        "isProficient": true,
+        "isRanged": false,
+        "name": "Longsword",
+        "rollsAttack": true,
+        "savingThrow": {}
+      },
+      "journalCommand": {},
+      "skillCheck": {},
+      "type": "custom-attack"
+    }
+  ]
+}

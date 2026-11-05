@@ -1,9 +1,5 @@
-class AbilityScore:
-    name: str
-    score: int
+from alchemy_py.models.ability_score import AbilityScore
 
-    def __init__(self, name: str, score: int):
-        self.name = name
-        self.score = score
+__all__ = ["AbilityScore"]
 
 

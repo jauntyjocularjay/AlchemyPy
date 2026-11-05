@@ -1,0 +1,22 @@
+{
+  "attack": {
+    "ability": "str",
+    "actionType": "Action",
+    "crit": 20,
+    "damageRolls": [
+      {
+        "abilityName": "str",
+        "dice": "1d8",
+        "type": "Piercing"
+      }
+    ],
+    "isProficient": true,
+    "isRanged": false,
+    "name": "Longsword",
+    "rollsAttack": true,
+    "savingThrow": {}
+  },
+  "journalCommand": {},
+  "skillCheck": {},
+  "type": "custom-attack"
+}

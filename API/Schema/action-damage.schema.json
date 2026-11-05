@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/action-damage.schema.json",
+  "title": "ActionStepDamage",
+  "description": "Damage roll metadata attached to an action attack.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["abilityName", "dice", "type"],
+  "properties": {
+    "abilityName": {
+      "type": "string",
+      "description": "Name of the ability used for the damage roll if any."
+    },
+    "dice": {
+      "$ref": "./dice.schema.json"
+    },
+    "type": {
+      "type": "string",
+      "description": "Damage type such as Piercing, Slashing, or Fire."
+    }
+  }
+}

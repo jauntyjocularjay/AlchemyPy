@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/alignment.schema.json",
+  "title": "Alignment",
+  "description": "JSON representation of a character alignment.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["morality", "order"],
+  "properties": {
+    "morality": {
+      "type": "string",
+      "enum": ["Good", "Neutral", "Evil"],
+      "description": "Moral axis of the alignment."
+    },
+    "order": {
+      "type": "string",
+      "enum": ["Lawful", "Neutral", "Chaotic"],
+      "description": "Order/behavior axis of the alignment."
+    },
+    "display": {
+      "type": "string",
+      "description": "Display string for the combined alignment, such as Lawful Good."
+    }
+  }
+}

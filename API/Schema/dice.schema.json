@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/dice.schema.json",
+  "title": "Dice",
+  "description": "Canonical dice expression used by the API as a string such as 1d8.",
+  "type": "string",
+  "pattern": "^[1-9]\\d*d[1-9]\\d*$",
+  "examples": ["1d8", "2d6", "1d20"]
+}

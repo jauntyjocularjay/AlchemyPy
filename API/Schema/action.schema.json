@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/action.schema.json",
+  "title": "Action",
+  "description": "Action object describing a combat or narrative action with steps.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["description", "name", "sortOrder", "steps"],
+  "properties": {
+    "description": {
+      "type": "string",
+      "description": "Human-readable action description."
+    },
+    "name": {
+      "type": "string",
+      "description": "Action name shown to the user."
+    },
+    "sortOrder": {
+      "type": "integer",
+      "description": "Display ordering of the action."
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "$ref": "./action-step.schema.json"
+      }
+    }
+  }
+}

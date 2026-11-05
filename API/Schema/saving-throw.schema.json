@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/saving-throw.schema.json",
+  "title": "SavingThrow",
+  "description": "JSON representation of a saving throw definition.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["abilityName", "difficultyClass"],
+  "properties": {
+    "abilityName": {
+      "type": "string",
+      "description": "Ability modifier or abbreviation for the save, such as CON."
+    },
+    "difficultyClass": {
+      "type": "integer",
+      "description": "Difficulty class of the saving throw."
+    }
+  }
+}

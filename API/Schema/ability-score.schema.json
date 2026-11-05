@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/ability-score.schema.json",
+  "title": "AbilityScore",
+  "description": "JSON representation of an ability score object.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "value"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Ability name such as str, dex, con, int, wis, or cha."
+    },
+    "value": {
+      "type": "integer",
+      "description": "Numeric score for the ability."
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/action-attack.schema.json",
+  "title": "ActionStepAttack-Template",
+  "description": "Attack payload embedded inside an action step.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ability", "actionType", "crit", "damageRolls", "isProficient", "isRanged", "name", "rollsAttack", "savingThrow"],
+  "properties": {
+    "ability": {
+      "type": ["string", "null"],
+      "description": "Ability used for the attack, commonly str, dex, or other."
+    },
+    "actionType": {
+      "type": "string",
+      "enum": ["Action", "Bonus Action", "Reaction"],
+      "description": "Action category for the attack."
+    },
+    "crit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20,
+      "description": "Critical hit threshold for the attack."
+    },
+    "damageRolls": {
+      "type": "array",
+      "items": {
+        "$ref": "./action-damage.schema.json"
+      }
+    },
+    "isProficient": {
+      "type": "boolean"
+    },
+    "isRanged": {
+      "type": "boolean"
+    },
+    "name": {
+      "type": "string"
+    },
+    "rollsAttack": {
+      "type": "boolean"
+    },
+    "savingThrow": {
+      "oneOf": [
+        { "$ref": "./saving-throw.schema.json" },
+        { "type": "object", "additionalProperties": true }
+      ]
+    },
+    "range": {
+      "type": ["integer", "null"],
+      "description": "Optional melee or ranged reach.",
+      "minimum": 0
+    },
+    "longRange": {
+      "type": ["integer", "null"],
+      "description": "Optional long range for the attack.",
+      "minimum": 0
+    }
+  }
+}

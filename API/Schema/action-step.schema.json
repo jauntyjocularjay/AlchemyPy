@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/action-step.schema.json",
+  "title": "ActionStep",
+  "description": "Single step in an action sequence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["message", "journal-command", "custom-dice-roll", "custom-attack", "skill-check"],
+      "description": "The kind of action step."
+    },
+    "attack": {
+      "$ref": "./action-attack.schema.json"
+    },
+    "journalCommand": {
+      "type": "object",
+      "description": "Journal command payload for a journal step.",
+      "additionalProperties": true
+    },
+    "skillCheck": {
+      "type": "object",
+      "description": "Skill check payload for a skill check step.",
+      "additionalProperties": true
+    }
+  }
+}

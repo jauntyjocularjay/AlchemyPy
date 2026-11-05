@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/character.schema.json",
+  "title": "Character",
+  "description": "Top-level character payload used for import/export.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["abilityScores", "actions", "alignment", "currentHP", "maxHP", "name"],
+  "properties": {
+    "abilityScores": {
+      "type": "array",
+      "items": {
+        "$ref": "./ability-score.schema.json"
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "$ref": "./action.schema.json"
+      }
+    },
+    "alignment": {
+      "type": "string",
+      "description": "Alignment as a display string such as Lawful Good."
+    },
+    "currentHP": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Current hit points."
+    },
+    "exp": {
+      "type": "integer",
+      "description": "Current experience points."
+    },
+    "initiativeBonus": {
+      "type": "integer",
+      "description": "Initiative bonus."
+    },
+    "isNPC": {
+      "type": "boolean"
+    },
+    "isSpellcaster": {
+      "type": "boolean"
+    },
+    "maxHP": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Maximum hit points."
+    },
+    "name": {
+      "type": "string",
+      "description": "Character name."
+    },
+    "speed": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Movement speed in feet."
+    },
+    "trackers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["color", "max", "name", "type", "value"],
+        "properties": {
+          "color": {
+            "type": "string",
+            "enum": ["Blue", "Green", "Orange", "Purple", "Red", "Yellow"]
+          },
+          "max": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["Bar", "Pip"]
+          },
+          "value": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "type": {
+      "type": "string",
+      "description": "Race or creature type such as Humanoid."
+    }
+  }
+}
